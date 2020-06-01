@@ -1,0 +1,69 @@
+<div
+  [popover]="popoverId"
+  [popoverOnHover]="true"
+  [popoverCloseOnMouseOutside]="true"
+  class="seedling"
+>
+  <div *ngIf="!seedling">
+    Empty
+  </div>
+  <div *ngIf="seedling">
+    {{ seedling.name }}
+  </div>
+</div>
+
+<popover-content
+  #popoverId
+  title="Detalji"
+  [closeOnMouseOutside]="true"
+  [animation]="true"
+  placement="top"
+>
+  <div *ngIf="seedling && seedling.progress < seedling.sproutTime">
+    <p>Naziv: {{ seedling.name }}</p>
+    <p>Proizvodjac: {{ seedling.producer }}</p>
+    <p>
+      <ngb-progressbar
+        [showValue]="true"
+        type="info"
+        [value]="seedling.progress"
+        [max]="seedling.sproutTime"
+      ></ngb-progressbar>
+    </p>
+    <p>Dodaj preparat</p>
+    <ng-select
+      [items]="products"
+      bindLabel="name"
+      [(ngModel)]="selectedProduct"
+    ></ng-select>
+    <button type="button" class="btn btn-success mt-1" (click)="addProduct()">
+      Dodaj
+    </button>
+  </div>
+  <div *ngIf="seedling && seedling.progress >= seedling.sproutTime">
+    <p>Naziv: {{ seedling.name }}</p>
+    <p>Proizvodjac: {{ seedling.producer }}</p>
+    <p>
+      <ngb-progressbar
+        [showValue]="true"
+        type="info"
+        [value]="seedling.progress"
+        [max]="seedling.sproutTime"
+      ></ngb-progressbar>
+    </p>
+    <button class="btn btn-outline-primary" (click)="remove()">
+      Izvadi sadnicu
+    </button>
+  </div>
+  <div *ngIf="!seedling">
+    <p>Zasadi sadnicu</p>
+    <ng-select
+      [items]="seedlings"
+      bindLabel="name"
+      [(ngModel)]="selectedSeedling"
+    ></ng-select>
+    <button type="button" class="btn btn-success mt-1" (click)="plant()">
+      Zasadi
+    </button>
+  </div>
+</popover-content>

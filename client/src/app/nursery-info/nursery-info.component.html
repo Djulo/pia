@@ -1,0 +1,72 @@
+<div *ngIf="nursery" class="container">
+  <div class="row justify-content-center mt-5 text-center">
+    <div class="col-sm-8">
+      <h2>{{ nursery.name }}</h2>
+      <hr />
+    </div>
+  </div>
+  <div class="row justify-content-center">
+    <div class="col-sm-8">
+      <span style="font-size: 28px; font-weight: 600;">Water: </span>
+      <span style="font-size: 28px;">{{ nursery.water }}l</span>
+    </div>
+    <div class="col-sm-4">
+      <div class="buttons">
+        <button type="button" class="btn btn-secondary" (click)="addWater()">
+          +
+        </button>
+        <button type="button" class="btn btn-secondary" (click)="removeWater()">
+          -
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="row justify-content-center">
+    <div class="col-sm-8">
+      <span style="font-size: 28px; font-weight: 600;">Temperature: </span>
+      <span style="font-size: 28px;">{{ nursery.temperature }}&deg;</span>
+    </div>
+    <div class="col-sm-4">
+      <div class="buttons">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="increaseTemperature()"
+        >
+          +
+        </button>
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="decreaseTemperature()"
+        >
+          -
+        </button>
+      </div>
+    </div>
+  </div>
+  <div
+    class="mt-3"
+    fxLayout="row wrap"
+    fxLayout.lt-sm="column"
+    fxLayoutGap="32px"
+    fxLayoutAlign="flex-start"
+    *ngIf="nursery && farmer"
+  >
+    <div
+      *ngFor="let _ of counter(nursery.width * nursery.height); let i = index"
+    >
+      <app-seedling
+        class="mt-4"
+        fxFlex.lt-sm="100%"
+        [position]="i"
+        [seedling]="getSeedling(i)"
+        [products]="farmer.storage.products"
+        [seedlings]="farmer.storage.seedlings"
+        (planted)="planted($event)"
+        (removedSeedling)="removedSeedling($event)"
+        (usedProduct)="usedProduct($event)"
+      ></app-seedling>
+    </div>
+  </div>
+</div>

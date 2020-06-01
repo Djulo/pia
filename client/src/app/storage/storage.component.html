@@ -1,0 +1,49 @@
+<h2 class="mt-4 text-center">Proizvodi</h2>
+<form>
+  <div class="form-group form-inline">
+    Full text search:
+    <input class="form-control ml-2" type="text" [formControl]="filter" />
+  </div>
+</form>
+<table *ngIf="farmer" class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col" sortable="type" (sort)="onSort($event)">Tip</th>
+      <th scope="col" sortable="name" (sort)="onSort($event)">Naziv</th>
+      <th scope="col" sortable="producer" (sort)="onSort($event)">
+        Proizvodjac
+      </th>
+      <th scope="col" sortable="quantity" (sort)="onSort($event)">Kolicina</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let item of items; index as i">
+      <th scope="row">{{ i + 1 }}</th>
+      <td>
+        <ngb-highlight
+          [result]="item.type"
+          [term]="filter.value"
+        ></ngb-highlight>
+      </td>
+      <td>
+        <ngb-highlight
+          [result]="item.name"
+          [term]="filter.value"
+        ></ngb-highlight>
+      </td>
+      <td>
+        <ngb-highlight
+          [result]="item.producer"
+          [term]="filter.value"
+        ></ngb-highlight>
+      </td>
+      <td>
+        <ngb-highlight
+          [result]="item.quantity | number"
+          [term]="filter.value"
+        ></ngb-highlight>
+      </td>
+    </tr>
+  </tbody>
+</table>

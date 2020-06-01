@@ -1,0 +1,135 @@
+<div class="card mt-4">
+  <h4 class="card-header">Home</h4>
+  <div class="card-body">
+    <p>
+      Your role is: <strong>{{ currentUser.role }}</strong
+      >.
+    </p>
+    <p class="mb-1">Current user from secure api end point:</p>
+    <div *ngIf="loading" class="spinner-border spinner-border-sm"></div>
+    <ul *ngIf="!loading">
+      <li>{{ currentUser.username }}</li>
+    </ul>
+    <div *ngIf="farmer">
+      <div
+        class="btn btn-primary"
+        [routerLink]="['/nurseries/create']"
+        routerLinkActive="router-link-active"
+      >
+        Novi rasadnik
+      </div>
+      <br />
+      <br />
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Naziv</th>
+            <th scope="col">Mesto</th>
+            <th scope="col">Broj sadnica</th>
+            <th scope="col">Slobodna mesta</th>
+            <th scope="col">Voda</th>
+            <th scope="col">Temperatura</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let nursery of farmer.nurseries; index as i"
+            [routerLink]="['/nurseries', nursery.id]"
+            routerLinkActive="router-link-active"
+          >
+            <th scope="row">{{ i + 1 }}</th>
+            <td>{{ nursery.name }}</td>
+            <td>{{ nursery.location }}</td>
+            <td>{{ nursery.seedlings.length }}</td>
+            <td>{{ nursery.freeSpace }}</td>
+            <td>{{ nursery.water | number }}</td>
+            <td>{{ nursery.temperature | number }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div *ngIf="company">
+      <div
+        class="btn btn-primary"
+        [routerLink]="['/items/create']"
+        routerLinkActive="router-link-active"
+      >
+        Dodaj proizvod
+      </div>
+      <br />
+      <br />
+      <h2>Narudzbine:</h2>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col" sortable="date" (sort)="onSort($event)">Datum</th>
+            <th scope="col">Poljoprivrednik</th>
+            <th scope="col">Lokacija</th>
+            <th scope="col">Status</th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let order of orders; index as i"
+            [ngClass]="{ status: checkStatus(order) }"
+          >
+            <th scope="row">{{ i + 1 }}</th>
+            <td>{{ order.date | date: "medium" }}</td>
+            <td>{{ order.farmer.username }}</td>
+            <td>{{ order.nursery.location }}</td>
+            <td>{{ order.status }}</td>
+            <td>
+              <div *ngIf="order.status != 'Delivering'">
+                <button
+                  class="btn btn-sm btn-success"
+                  (click)="confirmOrder(order)"
+                >
+                  Prihvati
+                </button>
+                <button
+                  class="btn ml-3 btn-sm btn-danger"
+                  (click)="declineOrder(order)"
+                >
+                  Odbij
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <br />
+      <br />
+      <h2>Proizvodi:</h2>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Tip</th>
+            <th scope="col">Naziv</th>
+            <th scope="col">Proizvodjac</th>
+            <th scope="col">Kolicina</th>
+            <th scope="col">Cena</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let item of company.items; index as i"
+            [routerLink]="['/items', item.id]"
+            routerLinkActive="router-link-active"
+          >
+            <th scope="row">{{ i + 1 }}</th>
+            <td>{{ item.type }}</td>
+            <td>{{ item.name }}</td>
+            <td>{{ item.producer }}</td>
+            <td>{{ item.quantity | number }}</td>
+            <td>{{ item.price | number }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

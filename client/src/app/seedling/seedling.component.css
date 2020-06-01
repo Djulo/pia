@@ -1,0 +1,12 @@
+:host {
+  border: 1px solid black;
+  border-radius: 8px;
+
+  display: grid;
+  justify-items: center;
+  align-items: center;
+}
+
+.seedling {
+  padding: 32px;
+}
