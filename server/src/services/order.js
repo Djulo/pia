@@ -9,6 +9,7 @@ module.exports = {
   create,
   update,
   delivery,
+  getByFarmerId,
 };
 
 async function create(params) {
@@ -32,6 +33,10 @@ async function create(params) {
   await company.save();
 }
 
+async function getByFarmerId(id) {
+  return await Order.find({ farmer: id });
+}
+
 async function update(id, orderParam) {
   const order = await Order.findById(id);
 
@@ -50,9 +55,13 @@ async function delivery(id, companyId, time) {
   const order = await Order.findById(id);
 
   if (!order) throw "Order not found";
+  if (!time) time = 1000;
 
   setTimeout(
     async function (order, companyId) {
+      order = Order.findById(order.id);
+      if (order.status == "Canceled") return;
+
       order.status = "Delivered";
       await order.save();
 
@@ -79,11 +88,12 @@ async function delivery(id, companyId, time) {
         }
       }
     },
-    1000,
+    1000 * 60 * 2,
     order,
     companyId
   );
 
   order.status = "Delivering";
+  order.confirmed = true;
   await order.save();
 }

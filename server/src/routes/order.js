@@ -9,6 +9,7 @@ const client = new Client("AIzaSyD0hKJB9Urho0ojkP73-c-C986LjM0lAmE");
 router.post("/create", create);
 router.put("/:id", update);
 router.post("/delivery/:id", delivery);
+router.get("/getByFarmerId/:id", getByFarmerId);
 
 module.exports = router;
 
@@ -25,6 +26,13 @@ function update(req, res, next) {
   orderService
     .update(req.params.id, req.body)
     .then(() => res.json({}))
+    .catch((err) => next(err));
+}
+
+function getByFarmerId(req, res, next) {
+  orderService
+    .getByFarmerId(req.params.id)
+    .then((orders) => res.json(orders))
     .catch((err) => next(err));
 }
 

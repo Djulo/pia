@@ -73,7 +73,8 @@ export class AuthenticationService {
     role: Role,
     location?: string,
     firstName?: string,
-    lastName?: string
+    lastName?: string,
+    active?: boolean
   ) {
     return this.http
       .post<any>(`${environment.apiUrl}/users/register`, {
@@ -84,6 +85,7 @@ export class AuthenticationService {
         location,
         firstName,
         lastName,
+        active,
       })
       .pipe(
         map((user) => {

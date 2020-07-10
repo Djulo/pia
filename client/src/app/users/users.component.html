@@ -1,13 +1,20 @@
 <div class="card mt-4">
-  <h4 class="card-header">Admin</h4>
+  <h4 class="card-header">Korisnici</h4>
   <div class="card-body">
     <div *ngIf="loading" class="spinner-border spinner-border-sm"></div>
-    <h1 *ngIf="!loading">Zahtevi:</h1>
+    <button
+      class="btn mb-3 btn-success"
+      [routerLink]="['/users/create']"
+      routerLinkActive="router-link-active"
+    >
+      Dodaj korisnika
+    </button>
     <table class="table table-striped" *ngIf="!loading">
       <thead>
         <tr>
           <th scope="col">#</th>
-          <th scope="col">Poljoprivrednik</th>
+          <th scope="col">Korisnik</th>
+          <!-- <th scope="col"></th> -->
           <th scope="col"></th>
         </tr>
       </thead>
@@ -15,9 +22,14 @@
         <tr *ngFor="let user of users; index as i">
           <th scope="row">{{ i + 1 }}</th>
           <td>{{ user.username }}</td>
+          <!-- <td>
+            <button class="btn btn-info btn-sm">
+              Izmeni
+            </button>
+          </td> -->
           <td>
-            <button class="btn btn-primary btn-sm" (click)="approve(user)">
-              Potvrdi
+            <button class="btn btn-danger btn-sm" (click)="delete(user)">
+              Izbrisi
             </button>
           </td>
         </tr>

@@ -14,7 +14,7 @@ app.use("/users", require("./routes/user"));
 app.use("/farmers", authorize(["Farmer", "Admin"]), require("./routes/farmer"));
 app.use(
   "/companies",
-  authorize(["Company", "Admin"]),
+  //authorize(["Company", "Admin"]),
   require("./routes/company")
 );
 app.use(

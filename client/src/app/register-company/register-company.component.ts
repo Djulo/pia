@@ -8,6 +8,7 @@ import { MustMatch } from '@app/_helpers';
 import { Role } from '@app/_models/role';
 
 @Component({
+  selector: 'app-register-company',
   templateUrl: './register-company.component.html',
 })
 export class RegisterCompanyComponent implements OnInit {
@@ -24,7 +25,10 @@ export class RegisterCompanyComponent implements OnInit {
     private authenticationService: AuthenticationService
   ) {
     // redirect to home if already logged in
-    if (this.authenticationService.currentUserValue) {
+    if (
+      this.authenticationService.currentUserValue &&
+      this.authenticationService.currentUserValue.role != Role.Admin
+    ) {
       this.router.navigate(['/']);
     }
   }
@@ -70,7 +74,10 @@ export class RegisterCompanyComponent implements OnInit {
         this.f.password.value,
         this.f.email.value,
         Role.Company,
-        this.f.location.value
+        this.f.location.value,
+        null,
+        null,
+        this.authenticationService.currentUserValue.role === Role.Admin
       )
       .pipe(first())
       .subscribe(

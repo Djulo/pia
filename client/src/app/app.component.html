@@ -300,7 +300,13 @@
     <a class="nav-item nav-link" routerLink="/storage" *ngIf="isFarmer"
       >Skladiste</a
     >
-    <a class="nav-item nav-link" routerLink="/admin" *ngIf="isAdmin">Admin</a>
+    <a class="nav-item nav-link" routerLink="/users" *ngIf="isAdmin"
+      >Korisnici</a
+    >
+    <a class="nav-item nav-link" routerLink="/statistics" *ngIf="isCompany"
+      >Statistika</a
+    >
+    <a class="nav-item nav-link" routerLink="/changePassword">Promena sifre</a>
     <a class="nav-item nav-link" (click)="logout()">Odjava</a>
   </div>
 </nav>

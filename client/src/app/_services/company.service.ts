@@ -17,6 +17,13 @@ export class CompanyService {
     return this.http.get<Company>(`${environment.apiUrl}/companies/${id}`);
   }
 
+  updateCourier(company: Company) {
+    return this.http.post<any>(
+      `${environment.apiUrl}/companies/${company.id}`,
+      {}
+    );
+  }
+
   getByUsername(username: string) {
     return this.http.get<Company>(
       `${environment.apiUrl}/companies/name/${username}`

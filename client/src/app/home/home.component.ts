@@ -50,7 +50,7 @@ export class HomeComponent {
 
   constructor(
     private router: Router,
-    private uesrService: UserService,
+    private userService: UserService,
     private farmerService: FarmerService,
     private companyService: CompanyService,
     private authenticationService: AuthenticationService,
@@ -85,7 +85,7 @@ export class HomeComponent {
           this.ORDERS = company.orders;
         });
     } else {
-      this.uesrService
+      this.userService
         .getById(this.currentUser.id)
         .pipe(first())
         .subscribe((user) => {
@@ -96,7 +96,9 @@ export class HomeComponent {
   }
 
   get orders() {
-    return this.company.orders.filter((order) => order.status != 'Delivered');
+    return this.company.orders.filter(
+      (order) => order.status == 'Created' || order.status == 'Waiting'
+    );
   }
 
   onSort({ column, direction }: SortEvent) {
@@ -116,27 +118,31 @@ export class HomeComponent {
 
   confirmOrder(order: Order) {
     if (this.company.courier == 0) {
+      order.confirmed = true;
       order.status = 'Waiting';
       this.orderService.update(order).subscribe();
       return;
     }
 
-    this.orderService
-      .delivery(
-        order.id,
-        this.company.location,
-        order.nursery.location,
-        this.company.id
-      )
-      .subscribe(() => {
-        this.companyService
-          .getById(this.currentUser.id)
-          .pipe(first())
-          .subscribe((company) => {
-            this.company = company;
-            this.ORDERS = company.orders;
-          });
-      });
+    this.company.courier--;
+    this.companyService.updateCourier(this.company).subscribe(() => {
+      this.orderService
+        .delivery(
+          order.id,
+          this.company.location,
+          order.nursery.location,
+          this.company.id
+        )
+        .subscribe(() => {
+          this.companyService
+            .getById(this.currentUser.id)
+            .pipe(first())
+            .subscribe((company) => {
+              this.company = company;
+              this.ORDERS = company.orders;
+            });
+        });
+    });
     console.log('confirm');
   }
 

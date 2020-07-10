@@ -33,6 +33,10 @@ import { PopoverModule } from 'ngx-smart-popover';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { NgbdSortableHeader } from './storage/sortable.directive';
 import { ChangePasswordComponent } from './change-password/change-password.component';
+import { StatisticsComponent } from './statistics/statistics.component';
+import { ChartsModule } from 'ng2-charts';
+import { UsersComponent } from './users/users.component';
+import { CreateUserComponent } from './admin/create-user/create-user.component';
 
 @NgModule({
   imports: [
@@ -53,6 +57,7 @@ import { ChangePasswordComponent } from './change-password/change-password.compo
     PopoverModule,
     NgbModule,
     NgSelectModule,
+    ChartsModule,
   ],
   declarations: [
     AppComponent,
@@ -70,6 +75,9 @@ import { ChangePasswordComponent } from './change-password/change-password.compo
     SeedlingComponent,
     NgbdSortableHeader,
     ChangePasswordComponent,
+    StatisticsComponent,
+    UsersComponent,
+    CreateUserComponent,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },

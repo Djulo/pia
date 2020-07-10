@@ -47,3 +47,41 @@
     </tr>
   </tbody>
 </table>
+
+<h2 class="mt-4 text-center">Narudzbine</h2>
+<table *ngIf="farmer" class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Tip</th>
+      <th scope="col">Naziv</th>
+      <th scope="col">
+        Proizvodjac
+      </th>
+      <th scope="col">Kolicina</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let item of itemsInDelivery; index as i">
+      <th scope="row">{{ i + 1 }}</th>
+      <td>
+        {{ item.type }}
+      </td>
+      <td>
+        {{ item.name }}
+      </td>
+      <td>
+        {{ item.producer }}
+      </td>
+      <td>
+        {{ item.quantity }}
+      </td>
+      <td>
+        <button class="btn btn-danger btn-sm" (click)="cancelOrder(item)">
+          Otkazi
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</table>

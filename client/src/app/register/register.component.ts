@@ -28,7 +28,10 @@ export class RegisterComponent implements OnInit {
     private authenticationService: AuthenticationService
   ) {
     // redirect to home if already logged in
-    if (this.authenticationService.currentUserValue) {
+    if (
+      this.authenticationService.currentUserValue &&
+      this.authenticationService.currentUserValue.role != Role.Admin
+    ) {
       this.router.navigate(['/']);
     }
   }
@@ -78,7 +81,8 @@ export class RegisterComponent implements OnInit {
         Role.Farmer,
         null,
         this.f.firstName.value,
-        this.f.lastName.value
+        this.f.lastName.value,
+        this.authenticationService.currentUserValue.role === Role.Admin
       )
       .pipe(first())
       .subscribe(

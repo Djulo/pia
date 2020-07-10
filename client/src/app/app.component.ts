@@ -25,6 +25,10 @@ export class AppComponent {
     return this.currentUser && this.currentUser.role === Role.Farmer;
   }
 
+  get isCompany() {
+    return this.currentUser && this.currentUser.role === Role.Company;
+  }
+
   logout() {
     this.authenticationService.logout();
     this.router.navigate(['/login']);

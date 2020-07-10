@@ -15,12 +15,27 @@ import { ItemInfoComponent } from './item-info/item-info.component';
 import { StoreComponent } from './store/store.component';
 import { StorageComponent } from './storage/storage.component';
 import { ChangePasswordComponent } from './change-password/change-password.component';
+import { StatisticsComponent } from './statistics/statistics.component';
+import { UsersComponent } from './users/users.component';
+import { CreateUserComponent } from './admin/create-user/create-user.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent, canActivate: [AuthGuard] },
   {
     path: 'admin',
     component: AdminComponent,
+    canActivate: [AuthGuard],
+    data: { roles: [Role.Admin] },
+  },
+  {
+    path: 'users',
+    component: UsersComponent,
+    canActivate: [AuthGuard],
+    data: { roles: [Role.Admin] },
+  },
+  {
+    path: 'users/create',
+    component: CreateUserComponent,
     canActivate: [AuthGuard],
     data: { roles: [Role.Admin] },
   },
@@ -64,6 +79,12 @@ const routes: Routes = [
     component: StorageComponent,
     canActivate: [AuthGuard],
     data: { roles: [Role.Farmer] },
+  },
+  {
+    path: 'statistics',
+    component: StatisticsComponent,
+    canActivate: [AuthGuard],
+    data: { roles: [Role.Company] },
   },
 
   // otherwise redirect to home

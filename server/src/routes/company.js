@@ -6,7 +6,7 @@ const companyService = require("../services/company");
 router.get("/", getAll);
 router.get("/current", getCurrent);
 router.get("/:id", getById);
-router.put("/:id", update);
+router.post("/:id", updateCourier);
 router.delete("/:id", _delete);
 
 module.exports = router;
@@ -32,9 +32,9 @@ function getById(req, res, next) {
     .catch((err) => next(err));
 }
 
-function update(req, res, next) {
+function updateCourier(req, res, next) {
   companyService
-    .update(req.params.id, req.body)
+    .updateCourier(req.params.id)
     .then(() => res.json({}))
     .catch((err) => next(err));
 }

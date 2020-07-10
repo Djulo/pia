@@ -24,6 +24,12 @@ export class OrderService {
     );
   }
 
+  getByFarmerId(id: string) {
+    return this.http.get<Order[]>(
+      `${environment.apiUrl}/orders/getByFarmerId/${id}`
+    );
+  }
+
   create(company: string, order: Order) {
     return this.http.post<any>(`${environment.apiUrl}/orders/create`, {
       company: company,

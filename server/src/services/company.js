@@ -5,7 +5,7 @@ const Company = db.Company;
 module.exports = {
   getAll,
   getById,
-  update,
+  updateCourier,
   delete: _delete,
 };
 
@@ -35,28 +35,14 @@ async function getById(id) {
     });
 }
 
-async function update(id, companyParams) {
+async function updateCourier(id) {
   const company = await Company.findById(id);
 
   // validate
   if (!company) throw "User not found";
-  if (
-    company.username !== company.username &&
-    (await Company.findOne({
-      username: companyParams.username,
-    }))
-  ) {
-    throw 'Username "' + companyParams.username + '" is already taken';
-  }
 
-  // hash password if it was entered
-  if (companyParams.password) {
-    companyParams.password = bcrypt.hashSync(companyParams.password, 10);
-  }
-
-  // copy companyParams properties to user
-  Object.assign(company, companyParams);
-
+  company.courier--;
+  console.log(company.courier);
   await company.save();
 }
 

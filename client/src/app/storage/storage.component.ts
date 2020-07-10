@@ -10,7 +10,7 @@ import {
   PipeTransform,
 } from '@angular/core';
 import { AuthenticationService, FarmerService } from '@app/_services';
-import { Farmer, Product, Seedling, Item } from '@app/_models';
+import { Farmer, Product, Seedling, Item, Order } from '@app/_models';
 import { first, startWith, map } from 'rxjs/operators';
 import {
   NgbdSortableHeader,
@@ -20,6 +20,7 @@ import {
 import { FormControl } from '@angular/forms';
 import { DecimalPipe } from '@angular/common';
 import { Observable } from 'rxjs';
+import { OrderService } from '@app/_services/order.service';
 
 const compare = (v1: string, v2: string) => (v1 < v2 ? -1 : v1 > v2 ? 1 : 0);
 
@@ -49,6 +50,9 @@ export class StorageComponent implements OnInit {
   items: Item[] = [];
   ITEMS: Item[] = [];
 
+  itemsInDelivery: Item[] = [];
+  orders: Order[] = [];
+
   filter = new FormControl('');
 
   @ViewChildren(NgbdSortableHeader) headers: QueryList<NgbdSortableHeader>;
@@ -56,6 +60,7 @@ export class StorageComponent implements OnInit {
   constructor(
     private authenticationService: AuthenticationService,
     private farmerService: FarmerService,
+    private orderService: OrderService,
     private pipe: DecimalPipe
   ) {
     this.filter.valueChanges
@@ -118,6 +123,19 @@ export class StorageComponent implements OnInit {
         this.ITEMS = this.items;
         console.log(this.items);
       });
+
+    this.orderService
+      .getByFarmerId(this.authenticationService.currentUserValue.id)
+      .pipe(first())
+      .subscribe((orders) => {
+        orders = orders.filter((order) => order.status == 'Delivering');
+        this.orders = orders;
+        orders.forEach((order) => {
+          order.items.forEach((item) => {
+            this.itemsInDelivery.push(item);
+          });
+        });
+      });
   }
 
   onSort({ column, direction }: SortEvent) {
@@ -140,6 +158,17 @@ export class StorageComponent implements OnInit {
         item.producer.toLowerCase().includes(term) ||
         pipe.transform(item.quantity).includes(term)
       );
+    });
+  }
+
+  cancelOrder(item: Item) {
+    const order = this.orders.find((order) => order.items.includes(item));
+
+    console.log('canceled');
+    order.status = 'Canceled';
+    this.orderService.update(order).subscribe(() => {
+      this.itemsInDelivery = this.itemsInDelivery.filter((i) => i != item);
+      this.orders = this.orders.filter((o) => o != order);
     });
   }
 }
